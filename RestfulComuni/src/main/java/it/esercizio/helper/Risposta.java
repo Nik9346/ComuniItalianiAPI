@@ -1,5 +1,6 @@
 package it.esercizio.helper;
 
+//classe utilizzata per generare una risposta con relativo codice e messaggio per la verifica dell'esecuzione delle funzioni
 public class Risposta {
 	
 	private int codice;
@@ -25,8 +26,4 @@ public class Risposta {
 	public void setMessaggio(String messaggio) {
 		this.messaggio = messaggio;
 	}
-	
-	
-	
-
 }
