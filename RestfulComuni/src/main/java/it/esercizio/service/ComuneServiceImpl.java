@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import it.esercizio.dao.ComuneDao;
 import it.esercizio.helper.Risposta;
 import it.esercizio.model.Comune;
+import it.esercizio.model.Coordinata;
 
 @Service
 public class ComuneServiceImpl implements ComuneService {
@@ -50,8 +51,10 @@ public class ComuneServiceImpl implements ComuneService {
 		if (!comuneOptional.isPresent())
 			return new Risposta(404, "Comune non trovato");
 		//altrimenti viene preso il comune trovato
+		Coordinata coordinata = comuneOptional.get().getCoordinate();
 		Comune comune = comuneOptional.get();
 		//vengono copiate le proprietà tranne quelle passate tra le parentesi
+		BeanUtils.copyProperties(nuovoComune.getCoordinate(), coordinata, "id");
 		BeanUtils.copyProperties(nuovoComune, comune, "id", "nome", "codiceCatastale", "coordinate");
 		//viene salvato il nuovo oggetto comune con le proprietà modificate
 		try {

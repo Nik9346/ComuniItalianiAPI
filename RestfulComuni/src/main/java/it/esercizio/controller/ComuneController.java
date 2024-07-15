@@ -1,11 +1,16 @@
 package it.esercizio.controller;
 
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindException;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -62,6 +67,14 @@ public class ComuneController {
 	public ResponseEntity<Risposta> cancellaComune(@PathVariable("codiceCatastale") String codiceCatastale){
 		Risposta risposta = comuneService.cancellaComune(codiceCatastale);
 		return ResponseEntity.status(risposta.getCodice()).body(risposta);
+	}
+	
+	//metodo per intercettare eccezione di validazione dati
+	@ExceptionHandler(BindException.class) //org.springframework.validation
+	public ResponseEntity<Map<String, String>> gestioneEccezioneValidazione(BindException e){
+		Map<String, String> errori = new HashMap<>();//si utilizza versione più efficiente in quanto non ci interessa ordinamento
+		e.getBindingResult().getFieldErrors().forEach(error->errori.put(error.getField(),error.getDefaultMessage())); //per ogni errore prendiamo il campo errore e il messaggio
+		return ResponseEntity.badRequest().body(errori); //settiamo la badrequest e come corpo impostiamo la mappa di errori
 	}
 	
 	
